@@ -3,7 +3,10 @@ if exists ("g:loaded_auctoribus_autoload")
 else
   let g:loaded_auctoribus_autoload=1
 
-function! auctoribus#WordCount () 
+let g:auctoribus_words = 0
+let g:auctoribus_bytes = 0
+
+function! auctoribus#Count () 
   let s:old_status = v:statusmsg
   let position = getpos(".")
   exe "silent normal g\<c-g>"
@@ -17,6 +20,24 @@ function! auctoribus#WordCount ()
   end
   call setpos('.', position)
   return [s:word_count, s:bytes_count]
-endfunction auctoribus#WordCount
+endfunction auctoribus#Count
+
+function! auctoribus#UpdateCount ()
+  let s:counters = auctoribus#Count()
+  let g:auctoribus_words = s:counters[0]
+  let g:auctoribus_bytes = s:counters[1]
+endfunction s:auctoribus#UpdateCount
+
+augroup auctoribus#counter
+    autocmd!
+    autocmd CursorHold,CursorHoldI,FileChangedShellPost,InsertLeave * call auctoribus#UpdateCount()
+augroup END
 
 endif
+
+" Set the status line as you please.
+" g:auctoribus_words is the word counter
+" g:auctoribus_bytes is the byte counter
+"
+" Example:
+" set statusline=%{g:auctoribus_words}\ words\ \ %{g:auctoribus_bytes}\ chars
