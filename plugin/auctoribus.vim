@@ -5,6 +5,11 @@ else
 
 let g:auctoribus_words = 0
 let g:auctoribus_bytes = 0
+let g:auctoribus_reading_time  = 0
+let g:auctoribus_speaking_time = 0
+
+let g:auctoribus_reading_rate  = 275
+let g:auctoribus_speaking_rate = 150
 
 set updatetime=300
 
@@ -28,9 +33,11 @@ function! auctoribus#UpdateCount ()
   let s:counters = auctoribus#Count()
   let g:auctoribus_words = s:counters[0]
   let g:auctoribus_bytes = s:counters[1]
+  let g:auctoribus_reading_time  = g:auctoribus_words / g:auctoribus_reading_rate
+  let g:auctoribus_speaking_time = g:auctoribus_words / g:auctoribus_speaking_rate
 endfunction s:auctoribus#UpdateCount
 
-augroup auctoribus#counter
+augroup auctoribus#countergroup
     autocmd!
     autocmd CursorHold,CursorHoldI,FileChangedShellPost,InsertLeave * call auctoribus#UpdateCount()
 augroup END
@@ -40,6 +47,9 @@ endif
 " Set the status line as you please.
 " g:auctoribus_words is the word counter
 " g:auctoribus_bytes is the byte counter
+" g:auctoribus_reading_time is the estimated reading time at g:auctoribus_reading_rate reading rate
+" g:auctoribus_speaking_time is the estimated speaking time at g:auctoribus_speaking_rate reading rate
 "
 " Example:
 " set statusline=%{g:auctoribus_words}\ words\ \ %{g:auctoribus_bytes}\ chars
+" :set statusline=%{g:auctoribus_words}\ words\ \ %{g:auctoribus_bytes}\ chars\ \ speaking:\ %{g:auctoribus_speaking_time}\ mins\ \ reading:\ %{g:auctoribus_reading_time}\ mins
