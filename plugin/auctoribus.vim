@@ -6,6 +6,8 @@ else
 let g:auctoribus_words = 0
 let g:auctoribus_bytes = 0
 
+set updatetime=300
+
 function! auctoribus#Count () 
   let s:old_status = v:statusmsg
   let position = getpos(".")
