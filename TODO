@@ -1,2 +1,2 @@
-- add support for writing goals (aiming for X characters, words, speaking time, reading time)
+- add support for writing goals (aiming for X characters, words, speaking time, reading time) [DONE]
 - add support for Tex/LaTeX (detex before counting words and characters)
