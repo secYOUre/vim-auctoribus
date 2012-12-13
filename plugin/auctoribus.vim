@@ -67,7 +67,7 @@ function! auctoribus#UpdateCount ()
     endif
   endif
 
-endfunction s:auctoribus#UpdateCount
+endfunction auctoribus#UpdateCount
 
 if exists("g:auctoribus") && g:auctoribus>0
    "Update Auctoribus counters when relevant events are fired"
