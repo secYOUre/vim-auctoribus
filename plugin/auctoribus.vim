@@ -2,7 +2,7 @@ if exists ("g:loaded_auctoribus_autoload")
   finish
 else
   let g:loaded_auctoribus_autoload=1
-  let g:auctoribus=1
+  let g:auctoribus_goal=1
 
 "Initialize counters"
 let b:auctoribus_words = 0
@@ -57,13 +57,15 @@ function! auctoribus#UpdateCount ()
   let b:auctoribus_reading_time  = b:auctoribus_words / g:auctoribus_reading_rate
   let b:auctoribus_speaking_time = b:auctoribus_words / g:auctoribus_speaking_rate
 
-  if exists("g:auctoribus_word_goal") || exists("g:auctoribus_char_goal") || ("g:auctoribus_speaking_goal") || exists("g:auctoribus_reading_goal")
-    " Make StatusLine light up if the author reached one or more writing goals"
+  if exists("g:auctoribus_goal") && g:auctoribus_goal>0
+    if exists("g:auctoribus_word_goal") || exists("g:auctoribus_char_goal") || ("g:auctoribus_speaking_goal") || exists("g:auctoribus_reading_goal")
+      " Make StatusLine light up if the author reached one or more writing goals"
 
-    if b:auctoribus_words>g:auctoribus_word_goal || b:auctoribus_bytes>g:auctoribus_char_goal || b:auctoribus_reading_time>g:auctoribus_reading_goal || b:auctoribus_speaking_time>g:auctoribus_speaking_goal
-      hi clear StatusLine | hi link StatusLine StatusLineLit
-    else
-      hi clear StatusLine | hi link StatusLine StatusLineUnlit
+      if b:auctoribus_words>g:auctoribus_word_goal || b:auctoribus_bytes>g:auctoribus_char_goal || b:auctoribus_reading_time>g:auctoribus_reading_goal || b:auctoribus_speaking_time>g:auctoribus_speaking_goal
+        hi clear StatusLine | hi link StatusLine StatusLineLit
+      else
+        hi clear StatusLine | hi link StatusLine StatusLineUnlit
+      endif
     endif
   endif
 
@@ -86,6 +88,12 @@ endif
 " b:auctoribus_bytes is the byte counter
 " b:auctoribus_reading_time is the estimated reading time at g:auctoribus_reading_rate reading rate
 " b:auctoribus_speaking_time is the estimated speaking time at g:auctoribus_speaking_rate reading rate
+"
+" Writing goals (words, characters, reading minutes, speaking minutes) are defined in:
+" g:auctoribus_word_goal 
+" g:auctoribus_char_goal 
+" g:auctoribus_reading_goal 
+" g:auctoribus_speaking_goal 
 "
 " Example:
 " :set statusline=%{b:auctoribus_words}\ words\ \ %{b:auctoribus_bytes}\ chars
