@@ -2,6 +2,7 @@ if exists ("g:loaded_auctoribus_autoload")
   finish
 else
   let g:loaded_auctoribus_autoload=1
+  let g:auctoribus=1
 
 let g:auctoribus_words = 0
 let g:auctoribus_bytes = 0
@@ -11,7 +12,8 @@ let g:auctoribus_speaking_time = 0
 let g:auctoribus_reading_rate  = 275
 let g:auctoribus_speaking_rate = 150
 
-set updatetime=300
+hi StatusLineLit   ctermfg=yellow ctermbg=darkblue cterm=reverse,bold gui=none guibg=yellow guifg=darkblue
+hi StatusLineUnlit ctermfg=gray ctermbg=black     cterm=reverse,bold gui=none guibg=gray  guifg=black
 
 function! auctoribus#Count () 
   let s:old_status = v:statusmsg
@@ -37,10 +39,14 @@ function! auctoribus#UpdateCount ()
   let g:auctoribus_speaking_time = g:auctoribus_words / g:auctoribus_speaking_rate
 endfunction s:auctoribus#UpdateCount
 
-augroup auctoribus#countergroup
-    autocmd!
-    autocmd CursorHold,CursorHoldI,FileChangedShellPost,InsertLeave * call auctoribus#UpdateCount()
-augroup END
+if exists("g:auctoribus") && g:auctoribus>0
+   "Update Auctoribus counters when relevant events are fired"
+   augroup auctoribus#countergroup
+      autocmd!
+      autocmd CursorHold,CursorHoldI,FileChangedShellPost,InsertLeave * call auctoribus#UpdateCount()
+   augroup END
+   set updatetime=700
+endif
 
 endif
 
