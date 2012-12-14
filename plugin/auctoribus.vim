@@ -2,7 +2,6 @@ if exists ("g:loaded_auctoribus_autoload")
   finish
 else
   let g:loaded_auctoribus_autoload=1
-  let g:auctoribus_goal=1
 
 "Initialize counters"
 let b:auctoribus_words = 0
@@ -29,7 +28,12 @@ endif
 if !exists("g:auctoribus_reading_goal")
   let g:auctoribus_reading_goal = 60
 endif
-
+if !exists("g:auctoribus_goal")
+  let g:auctoribus_goal = 1
+endif
+if !exists("g:auctoribus")
+  let g:auctoribus = 0
+endif
 
 hi StatusLineLit   ctermfg=yellow ctermbg=darkblue cterm=reverse,bold gui=none guibg=yellow guifg=darkblue
 hi StatusLineUnlit ctermfg=gray ctermbg=black     cterm=reverse,bold gui=none guibg=gray  guifg=black
