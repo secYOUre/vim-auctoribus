@@ -6,8 +6,10 @@ else
 "Initialize counters"
 let b:auctoribus_words = 0
 let b:auctoribus_bytes = 0
+let b:auctoribus_sentences = 0
 let b:auctoribus_reading_time  = 0
 let b:auctoribus_speaking_time = 0
+let b:auctoribus_ari = 0
 
 "Set defaults"
 if !exists("g:auctoribus_reading_rate")
@@ -38,6 +40,10 @@ endif
 hi StatusLineLit   ctermfg=yellow ctermbg=darkblue cterm=reverse,bold gui=none guibg=yellow guifg=darkblue
 hi StatusLineUnlit ctermfg=gray ctermbg=black     cterm=reverse,bold gui=none guibg=gray  guifg=black
 
+function! auctoribus#CountSentences()
+  return eval(join(map(range(1, line('$')), 'len(substitute(getline(v:val),"[^\.]","","g"))')," + "))
+endfunction auctoribus#CountSentences
+
 function! auctoribus#Count () 
   let s:old_status = v:statusmsg
   let position = getpos(".")
@@ -45,21 +51,30 @@ function! auctoribus#Count ()
   let stat = v:statusmsg
   let l:word_count = 0
   let l:bytes_count = 0
+  let l:sentence_count = 0
   if stat != '--No lines in buffer--'
     let l:word_count = str2nr(split(v:statusmsg)[11])
     let l:bytes_count = str2nr(split(v:statusmsg)[15])
+    let l:sentence_count = auctoribus#CountSentences()
     let v:statusmsg = s:old_status
   end
   call setpos('.', position)
-  return [l:word_count, l:bytes_count]
+  return [l:word_count, l:bytes_count, l:sentence_count]
 endfunction auctoribus#Count
+
+function! auctoribus#ARI (letters, words, sentences)
+  return string(4.71*(a:letters/a:words)+0.5*(a:words/a:sentences)-21.43)
+endfunction auctoribus#ARI
 
 function! auctoribus#UpdateCount ()
   let l:counters = auctoribus#Count()
   let b:auctoribus_words = l:counters[0]
   let b:auctoribus_bytes = l:counters[1]
+  let b:auctoribus_sentences = l:counters[2]
   let b:auctoribus_reading_time  = b:auctoribus_words / g:auctoribus_reading_rate
   let b:auctoribus_speaking_time = b:auctoribus_words / g:auctoribus_speaking_rate
+
+  let b:auctoribus_ari = auctoribus#ARI(b:auctoribus_bytes, b:auctoribus_words, b:auctoribus_sentences)
 
   if exists("g:auctoribus_goal") && g:auctoribus_goal>0
     if exists("g:auctoribus_word_goal") || exists("g:auctoribus_char_goal") || ("g:auctoribus_speaking_goal") || exists("g:auctoribus_reading_goal")
@@ -90,6 +105,8 @@ endif
 " Set the status line as you please.
 " b:auctoribus_words is the word counter
 " b:auctoribus_bytes is the byte counter
+" b:auctoribus_sentences is the sentences counter
+" b:auctoribus_ari is the Automated Readablity Index (ARI) score
 " b:auctoribus_reading_time is the estimated reading time at g:auctoribus_reading_rate reading rate
 " b:auctoribus_speaking_time is the estimated speaking time at g:auctoribus_speaking_rate reading rate
 "
@@ -103,3 +120,5 @@ endif
 " :set statusline=%{b:auctoribus_words}\ words\ \ %{b:auctoribus_bytes}\ chars
 " :set statusline=%{b:auctoribus_words}\ words\ \ %{b:auctoribus_bytes}\ chars\ \ speaking:\ %{b:auctoribus_speaking_time}\ mins\ \ reading:\ %{b:auctoribus_reading_time}\ mins
 " :set statusline=%{b:auctoribus_words}/%{g:auctoribus_word_goal}\ words\ \ %{b:auctoribus_bytes}/%{g:auctoribus_char_goal}\ chars\ \ %{b:auctoribus_speaking_time }/%{g:auctoribus_speaking_goal}\ mins\ speaking\ \ %{b:auctoribus_reading_time}/%{g:auctoribus_reading_goal}\ mins\ reading
+" :set statusline=%{b:auctoribus_words}\ words\ \ %{b:auctoribus_bytes}\ chars\ \ \ %{b:auctoribus_sentences} sentences
+" :set statusline=%{b:auctoribus_words}\ words\ \ %{b:auctoribus_bytes}\ chars\ \ ARI:\ %{b:auctoribus_ari}
