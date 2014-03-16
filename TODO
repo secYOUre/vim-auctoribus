@@ -2,3 +2,4 @@
 - add support for Tex/LaTeX (detex before counting words and characters)
 - add documentation and help section
 - add .vimrc example(s)
+- add support for readability metrics for English: Automated Readability Index, Kincaid Formula, Coleman-Liau Formula, Flesch reading ease formula, Fog index, SMOG Grading, LIX formula
