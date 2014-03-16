@@ -11,7 +11,7 @@ let b:auctoribus_speaking_time = 0
 
 "Set defaults"
 if !exists("g:auctoribus_reading_rate")
-  let g:auctoribus_reading_rate  = 275
+  let g:auctoribus_reading_rate  = 175
 endif
 if !exists("g:auctoribus_speaking_rate")
   let g:auctoribus_speaking_rate = 150
