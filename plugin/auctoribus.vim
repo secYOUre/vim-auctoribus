@@ -42,7 +42,7 @@ hi StatusLineLit   ctermfg=yellow ctermbg=darkblue cterm=reverse,bold gui=none g
 hi StatusLineUnlit ctermfg=gray ctermbg=black     cterm=reverse,bold gui=none guibg=gray  guifg=black
 
 function! auctoribus#CountSentences()
-  return eval(join(map(range(1, line('$')), 'len(substitute(getline(v:val),"[^\.]","","g"))')," + "))
+  return eval(join(map(range(1, line('$')), 'len(substitute(getline(v:val),"[^\.!?]","","gn"))')," + "))
 endfunction auctoribus#CountSentences
 
 function! auctoribus#Count () 
