@@ -42,11 +42,6 @@ hi StatusLineLit   ctermfg=yellow ctermbg=darkblue cterm=reverse,bold gui=none g
 hi StatusLineUnlit ctermfg=gray ctermbg=black     cterm=reverse,bold gui=none guibg=gray  guifg=black
 
 function! auctoribus#CountSentences()
-  "s/\([\.!?]\)\@<=[\.!?]\+\>//g
-
-  "let l:filtered = map(range(1, line('$')), 'substitute(getline(v:val), "[\.!?]\@<=[\.!?]\+","","g")')
-  "return eval(join(map(range(1, len(l:filtered)), 'len(substitute(l:filtered[v:val - 1],"[^\.!?]","","gn"))')," + "))
-
   return eval(join(map(range(1, line('$')), 'len(split(getline(v:val), "[.!?][])\042\047]*\\($\\|[ ]\\)", 1)) - 1')," + "))
 endfunction auctoribus#CountSentences
 
