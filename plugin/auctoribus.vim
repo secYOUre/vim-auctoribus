@@ -55,26 +55,26 @@ function! auctoribus#CountSentences()
 endfunction auctoribus#CountSentences
 
 function! auctoribus#CountChars()
-  return eval(join(map(range(1, line('$')), 'len(substitute(getline(v:val), "[^[:alnum:]\|[:punct:]]","","g"))')," + "))
+  return eval(join(map(range(1, line('$')), 'len(substitute(getline(v:val), "[^[:alnum:][:punct:]]","","g"))')," + "))
 endfunction auctoribus#CountChars
 
 function! auctoribus#Count () 
   let s:old_status = v:statusmsg
   let position = getpos(".")
   exe "silent normal g\<c-g>"
-  let stat = v:statusmsg
+  let l:stat = v:statusmsg
   let l:word_count = 0
-  let l:bytes_count = 0
+  let l:chars_count = 0
   let l:sentence_count = 0
-  if stat != '--No lines in buffer--'
+  if l:stat != '--No lines in buffer--'
     let l:word_count = str2nr(split(v:statusmsg)[11])
-    "let l:bytes_count = str2nr(split(v:statusmsg)[15])
-    let l:bytes_count = auctoribus#CountChars()
+    "let l:chars_count = str2nr(split(v:statusmsg)[15])
+    let l:chars_count = auctoribus#CountChars()
     let l:sentence_count = auctoribus#CountSentences()
     let v:statusmsg = s:old_status
   end
   call setpos('.', position)
-  return [l:word_count, l:bytes_count, l:sentence_count]
+  return [l:word_count, l:chars_count, l:sentence_count]
 endfunction auctoribus#Count
 
 function! auctoribus#ARI (letters, words, sentences)
@@ -101,7 +101,7 @@ function! auctoribus#UpdateCount ()
     if exists("g:auctoribus_word_goal") || exists("g:auctoribus_char_goal") || ("g:auctoribus_speaking_goal") || exists("g:auctoribus_reading_goal") || exists("g:auctoribus_ari_goal") || exists("g:auctoribus_clf_goal") || exists("g:auctoribus_sentence_goal")
       " Make StatusLine light up if the author reached one or more writing goals"
 
-      if b:auctoribus_words>g:auctoribus_word_goal || b:auctoribus_bytes>g:auctoribus_char_goal || b:auctoribus_reading_time>g:auctoribus_reading_goal || b:auctoribus_speaking_time>g:auctoribus_speaking_goal || b:auctoribus_ari>g:auctoribus_ari_goal || b:auctoribus_clf>g:auctoribus_clf_goal || b:auctoribus_sentences>b:auctoribus_sentence_goal
+      if b:auctoribus_words>g:auctoribus_word_goal || b:auctoribus_bytes>g:auctoribus_char_goal || b:auctoribus_reading_time>g:auctoribus_reading_goal || b:auctoribus_speaking_time>g:auctoribus_speaking_goal || b:auctoribus_ari>g:auctoribus_ari_goal || b:auctoribus_clf>g:auctoribus_clf_goal || b:auctoribus_sentences>g:auctoribus_sentence_goal
         hi clear StatusLine | hi link StatusLine StatusLineLit
       else
         hi clear StatusLine | hi link StatusLine StatusLineUnlit
