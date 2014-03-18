@@ -51,6 +51,10 @@ function! auctoribus#CountSentences()
   return eval(join(map(range(1, line('$')), 'len(split(getline(v:val), "[.!?][])\042\047]*\\($\\|[ ]\\)", 1)) - 1')," + "))
 endfunction auctoribus#CountSentences
 
+function! auctoribus#CountChars()
+  return eval(join(map(range(1, line('$')), 'len(substitute(getline(v:val), "[^[:alnum:]\|[:punct:]]","","g"))')," + "))
+endfunction auctoribus#CountChars
+
 function! auctoribus#Count () 
   let s:old_status = v:statusmsg
   let position = getpos(".")
@@ -61,7 +65,8 @@ function! auctoribus#Count ()
   let l:sentence_count = 0
   if stat != '--No lines in buffer--'
     let l:word_count = str2nr(split(v:statusmsg)[11])
-    let l:bytes_count = str2nr(split(v:statusmsg)[15])
+    "let l:bytes_count = str2nr(split(v:statusmsg)[15])
+    let l:bytes_count = auctoribus#CountChars()
     let l:sentence_count = auctoribus#CountSentences()
     let v:statusmsg = s:old_status
   end
