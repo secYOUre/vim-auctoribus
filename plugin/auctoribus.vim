@@ -31,6 +31,12 @@ endif
 if !exists("g:auctoribus_reading_goal")
   let g:auctoribus_reading_goal = 60
 endif
+if !exists("g:auctoribus_ari_goal")
+  let g:auctoribus_ari_goal = 10.0
+endif
+if !exists("g:auctoribus_clf_goal")
+  let g:auctoribus_clf_goal = 14.0
+endif
 if !exists("g:auctoribus_goal")
   let g:auctoribus_goal = 1
 endif
@@ -84,10 +90,10 @@ function! auctoribus#UpdateCount ()
   let b:auctoribus_clf = auctoribus#CLF(b:auctoribus_bytes, b:auctoribus_words, b:auctoribus_sentences)
 
   if exists("g:auctoribus_goal") && g:auctoribus_goal>0
-    if exists("g:auctoribus_word_goal") || exists("g:auctoribus_char_goal") || ("g:auctoribus_speaking_goal") || exists("g:auctoribus_reading_goal")
+    if exists("g:auctoribus_word_goal") || exists("g:auctoribus_char_goal") || ("g:auctoribus_speaking_goal") || exists("g:auctoribus_reading_goal") || exists("g:auctoribus_ari_goal") || exists("g:auctoribus_clf_goal")
       " Make StatusLine light up if the author reached one or more writing goals"
 
-      if b:auctoribus_words>g:auctoribus_word_goal || b:auctoribus_bytes>g:auctoribus_char_goal || b:auctoribus_reading_time>g:auctoribus_reading_goal || b:auctoribus_speaking_time>g:auctoribus_speaking_goal
+      if b:auctoribus_words>g:auctoribus_word_goal || b:auctoribus_bytes>g:auctoribus_char_goal || b:auctoribus_reading_time>g:auctoribus_reading_goal || b:auctoribus_speaking_time>g:auctoribus_speaking_goal || b:auctoribus_ari>g:auctoribus_ari_goal || b:auctoribus_clf>g:auctoribus_clf_goal
         hi clear StatusLine | hi link StatusLine StatusLineLit
       else
         hi clear StatusLine | hi link StatusLine StatusLineUnlit
@@ -109,7 +115,7 @@ endif
 
 endif
 
-" Set the status line as you please.
+" Set the status line as you deem more useful to you.
 " b:auctoribus_words is the word counter
 " b:auctoribus_bytes is the byte counter
 " b:auctoribus_sentences is the sentences counter
@@ -118,11 +124,13 @@ endif
 " b:auctoribus_reading_time is the estimated reading time at g:auctoribus_reading_rate reading rate
 " b:auctoribus_speaking_time is the estimated speaking time at g:auctoribus_speaking_rate reading rate
 "
-" Writing goals (words, characters, reading minutes, speaking minutes) are defined in:
+" Writing goals (words, characters, reading minutes, speaking minutes, Automated Readability Index score, Coleman-Liau Index score) are defined in:
 " g:auctoribus_word_goal 
 " g:auctoribus_char_goal 
 " g:auctoribus_reading_goal 
 " g:auctoribus_speaking_goal 
+" g:auctoribus_ari_goal 
+" g:auctoribus_clf_goal 
 "
 " Example:
 " :set statusline=%{b:auctoribus_words}\ words\ \ %{b:auctoribus_bytes}\ chars
