@@ -38,7 +38,7 @@ if !exists("g:auctoribus_ari_goal")
   let g:auctoribus_ari_goal = 10.0
 endif
 if !exists("g:auctoribus_clf_goal")
-  let g:auctoribus_clf_goal = 14.0
+  let g:auctoribus_clf_goal = 12.0
 endif
 if !exists("g:auctoribus_goal")
   let g:auctoribus_goal = 1
@@ -99,9 +99,9 @@ function! auctoribus#UpdateCount ()
 
   if exists("g:auctoribus_goal") && g:auctoribus_goal>0
     if exists("g:auctoribus_word_goal") || exists("g:auctoribus_char_goal") || ("g:auctoribus_speaking_goal") || exists("g:auctoribus_reading_goal") || exists("g:auctoribus_ari_goal") || exists("g:auctoribus_clf_goal") || exists("g:auctoribus_sentence_goal")
-      " Make StatusLine light up if the author reached one or more writing goals"
+      " Make StatusLine light up if the author reached production, delivery, and readability goals. At least one goal per category need to be reached."
 
-      if b:auctoribus_words>g:auctoribus_word_goal || b:auctoribus_bytes>g:auctoribus_char_goal || b:auctoribus_reading_time>g:auctoribus_reading_goal || b:auctoribus_speaking_time>g:auctoribus_speaking_goal || b:auctoribus_ari>g:auctoribus_ari_goal || b:auctoribus_clf>g:auctoribus_clf_goal || b:auctoribus_sentences>g:auctoribus_sentence_goal
+      if (b:auctoribus_words>g:auctoribus_word_goal || b:auctoribus_bytes>g:auctoribus_char_goal || b:auctoribus_sentences>g:auctoribus_sentence_goal) && (b:auctoribus_reading_time>g:auctoribus_reading_goal || b:auctoribus_speaking_time>g:auctoribus_speaking_goal) && (b:auctoribus_ari<g:auctoribus_ari_goal || b:auctoribus_clf<g:auctoribus_clf_goal)
         hi clear StatusLine | hi link StatusLine StatusLineLit
       else
         hi clear StatusLine | hi link StatusLine StatusLineUnlit
@@ -133,11 +133,16 @@ endif
 " b:auctoribus_speaking_time is the estimated speaking time at g:auctoribus_speaking_rate reading rate
 "
 " Writing goals (words, characters, number of sentences, reading minutes, speaking minutes, Automated Readability Index score, Coleman-Liau Index score) are defined in:
+" Production goals:
 " g:auctoribus_word_goal 
 " g:auctoribus_char_goal 
 " g:auctoribus_sentence_goal 
+"
+" Delivery goals:
 " g:auctoribus_reading_goal 
 " g:auctoribus_speaking_goal 
+"
+" Readability goals:
 " g:auctoribus_ari_goal 
 " g:auctoribus_clf_goal 
 "
