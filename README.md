@@ -1,2 +1,2 @@
 #Vim Auctoribus
-##A Vim plugin for writers
+##A Vim plugin for authors
