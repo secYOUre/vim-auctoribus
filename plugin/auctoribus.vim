@@ -43,12 +43,40 @@ endif
 if !exists("g:auctoribus_goal")
   let g:auctoribus_goal = 1
 endif
+if !exists("g:auctoribus_theme_litfg")
+  let g:auctoribus_theme_litfg='yellow'
+endif
+if !exists("g:auctoribus_theme_litbg")
+  let g:auctoribus_theme_litbg='darkblue'
+endif
+if !exists("g:auctoribus_theme_unlitfg")
+  let g:auctoribus_theme_unlitfg='gray'
+endif
+if !exists("g:auctoribus_theme_unlitbg")
+  let g:auctoribus_theme_unlitbg='black'
+endif
 if !exists("g:auctoribus")
   let g:auctoribus = 0
 endif
 
-hi StatusLineLit   ctermfg=yellow ctermbg=darkblue cterm=reverse,bold gui=none guibg=yellow guifg=darkblue
-hi StatusLineUnlit ctermfg=gray ctermbg=black     cterm=reverse,bold gui=none guibg=gray  guifg=black
+command! -nargs=+ Hi call CustomHighlighter(<f-args>)
+function! CustomHighlighter(name, ...)
+    let colour_order = ['ctermfg', 'ctermbg', 'guifg', 'guibg']
+    let command = 'hi ' . a:name
+    if (len(a:000) < 1) || (len(a:000) > (len(colour_order)))
+        echoerr "No colour or too many colours specified"
+    else
+        for i in range(0,len(a:000)-1)
+            let command .= ' ' . colour_order[i] . '=' . a:000[i]
+        endfor
+        let command .= ' cterm=reverse,bold gui=none'
+        exe command 
+    endif
+endfunc 
+
+exe 'Hi' 'StatusLineLit' g:auctoribus_theme_litfg g:auctoribus_theme_litbg g:auctoribus_theme_litfg g:auctoribus_theme_litbg
+exe 'Hi' 'StatusLineUnlit' g:auctoribus_theme_unlitfg g:auctoribus_theme_unlitbg g:auctoribus_theme_unlitfg g:auctoribus_theme_unlitbg
+
 
 function! auctoribus#CountSentences()
   return eval(join(map(range(1, line('$')), 'len(split(getline(v:val), "[.!?][])\042\047]*\\($\\|[ ]\\)", 1)) - 1')," + "))
