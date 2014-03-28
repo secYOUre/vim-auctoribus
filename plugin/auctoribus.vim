@@ -61,16 +61,16 @@ endif
 
 command! -nargs=+ Hi call CustomHighlighter(<f-args>)
 function! CustomHighlighter(name, ...)
-    let colour_order = ['ctermfg', 'ctermbg', 'guifg', 'guibg']
-    let command = 'hi ' . a:name
-    if (len(a:000) < 1) || (len(a:000) > (len(colour_order)))
+    let l:colour_order = ['ctermfg', 'ctermbg', 'guifg', 'guibg']
+    let l:command = 'hi ' . a:name
+    if (len(a:000) < 1) || (len(a:000) > (len(l:colour_order)))
         echoerr "No colour or too many colours specified"
     else
         for i in range(0,len(a:000)-1)
-            let command .= ' ' . colour_order[i] . '=' . a:000[i]
+            let l:command .= ' ' . l:colour_order[i] . '=' . a:000[i]
         endfor
-        let command .= ' cterm=reverse,bold gui=none'
-        exe command 
+        let l:command .= ' cterm=reverse,bold gui=none'
+        exe l:command 
     endif
 endfunc 
 
